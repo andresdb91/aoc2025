@@ -11,7 +11,7 @@ fn day4_part1_test() {
 }
 
 #[test]
-#[ignore]
+// #[ignore]
 fn day4_part1() {
     let file = fs::read_to_string("input/day4.txt").unwrap();
     let data: Vec<&str> = file.split_terminator("\n").collect();
@@ -20,16 +20,16 @@ fn day4_part1() {
 }
 
 #[test]
-#[ignore]
+// #[ignore]
 fn day4_part2_test() {
     let file = fs::read_to_string("input_test/day4.txt").unwrap();
     let data: Vec<&str> = file.split_terminator("\n").collect();
-    let result: u64 = 3121910778619;
+    let result: u64 = 43;
     assert_eq!(aoc2025::day4::day4_2(data), result)
 }
 
 #[test]
-#[ignore]
+// #[ignore]
 fn day4_part2() {
     let file = fs::read_to_string("input/day4.txt").unwrap();
     let data: Vec<&str> = file.split_terminator("\n").collect();
