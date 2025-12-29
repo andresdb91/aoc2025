@@ -32,7 +32,7 @@ fn day6_part2_test() {
 }
 
 #[test]
-#[ignore]
+// #[ignore]
 fn day6_part2() {
     let file = fs::read_to_string("input/day6.txt").unwrap();
     let data: Vec<&str> = file.split_terminator("\n").collect();
