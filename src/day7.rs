@@ -1,4 +1,4 @@
-use std::cmp::{min, max};
+use std::cmp::{max, min};
 
 pub fn day7_1(input: Vec<&str>) -> u64 {
     let mut rows: Vec<Vec<char>> = input.iter().map(|x| x.chars().collect()).collect();
@@ -9,15 +9,15 @@ pub fn day7_1(input: Vec<&str>) -> u64 {
             match rows[j][i] {
                 '^' => {
                     // Split
-                    if rows[j-1][i] == '|' || rows[j-1][i] == 'S' {
-                        rows[j][max(0, i-1)] = '|';
-                        rows[j][min(row_len, i+1)] = '|';
+                    if rows[j - 1][i] == '|' || rows[j - 1][i] == 'S' {
+                        rows[j][max(0, i - 1)] = '|';
+                        rows[j][min(row_len, i + 1)] = '|';
                         splits += 1;
                     }
                 }
                 '.' => {
                     // Copy
-                    rows[j][i] = rows[j-1][i]
+                    rows[j][i] = rows[j - 1][i]
                 }
                 _ => {}
             }
@@ -29,34 +29,43 @@ pub fn day7_1(input: Vec<&str>) -> u64 {
 pub fn day7_2(input: Vec<&str>) -> u64 {
     let rows: Vec<Vec<char>> = input.iter().map(|x| x.chars().collect()).collect();
     let row_len = rows[0].len();
-    let row_num = rows.len();
-    let mut multiverse = vec![(1, rows.clone())];
+    // let row_num = rows.len();
+    let mut multiverse = vec![rows.clone()];
     let mut timelines = 0;
     let mut current = 0;
+    let start = std::time::Instant::now();
     loop {
-        for j in multiverse[current].0..row_num {
+        for j in 1..multiverse[current].len() {
             for i in 0..row_len {
-                match multiverse[current].1[j][i] {
+                match multiverse[current][j][i] {
                     '^' => {
                         // Split
-                        if multiverse[current].1[j-1][i] == '|' || multiverse[current].1[j-1][i] == 'S' {
+                        if multiverse[current][j - 1][i] == '|'
+                            || multiverse[current][j - 1][i] == 'S'
+                        {
                             timelines += 1;
-                            multiverse.push((j+1, multiverse[current].1.clone()));
-                            multiverse[current].1[j][max(0, i-1)] = '|';
-                            multiverse[timelines].1[j][min(row_len, i+1)] = '|';
+                            multiverse.insert(current + 1, multiverse[current][j..].to_vec());
+                            multiverse[current][j][max(0, i - 1)] = '|';
+                            multiverse[timelines][0][min(row_len, i + 1)] = '|';
                         }
                     }
                     '.' => {
                         // Copy
-                        multiverse[current].1[j][i] = multiverse[current].1[j-1][i]
+                        multiverse[current][j][i] = multiverse[current][j - 1][i]
                     }
                     _ => {}
                 }
             }
         }
         if current < timelines {
-            current += 1
+            current += 1;
+            if current % 200000 == 0 {
+                let elapsed = start.elapsed();
+                println!("Scanning timeline {} - Elapsed: {:?}", current, elapsed)
+            }
         } else {
+            let elapsed = start.elapsed();
+            println!("Scanning finished - Elapsed: {:?}", elapsed);
             break;
         }
     }
